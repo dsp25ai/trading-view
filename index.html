@@ -14,77 +14,107 @@
             --font-mono: 'JetBrains Mono', monospace;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-        
-        nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 24px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.2rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
-        .live-status { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; color: var(--green); }
-        .pulse { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
-        .dashboard { max-width: 1800px; margin: 20px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
+        nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 24px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.1rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+        .nav-search { background: #0d1117; border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; display: flex; align-items: center; gap: 8px; width: 300px; }
+        .nav-search input { background: transparent; border: none; color: #fff; outline: none; font-size: 0.8rem; width: 100%; }
+
+        .dashboard { max-width: 1800px; margin: 15px auto; padding: 0 15px; display: grid; grid-template-columns: 1fr 400px; gap: 15px; }
         
-        .main-pane { display: flex; flex-direction: column; gap: 20px; }
-        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .stat-item { background: var(--card); border: 1px solid var(--border); padding: 16px; border-radius: 8px; }
-        .stat-label { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
-        .stat-value { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; }
-        
-        .chart-pane { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; min-height: 600px; position: relative; }
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .ticker-info { display: flex; align-items: center; gap: 12px; }
-        .ticker-symbol { font-size: 1.5rem; font-weight: 800; }
-        .ticker-price { font-family: var(--font-mono); font-size: 1.2rem; color: var(--primary); }
-        
-        .tf-selector { display: flex; gap: 4px; background: #0d1117; padding: 3px; border-radius: 6px; }
-        .tf-selector button { padding: 4px 10px; border: none; background: transparent; color: var(--muted); border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: 0.2s; }
+        .main-pane { display: flex; flex-direction: column; gap: 15px; }
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .stat-item { background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 8px; }
+        .stat-label { font-size: 0.65rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+        .stat-value { font-family: var(--font-mono); font-size: 1.2rem; font-weight: 700; margin-top: 4px; }
+
+        .chart-pane { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 15px; min-height: 550px; }
+        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .ticker-info { display: flex; align-items: center; gap: 10px; }
+        .ticker-symbol { font-size: 1.4rem; font-weight: 800; }
+        .tf-selector { display: flex; gap: 2px; background: #0d1117; padding: 2px; border-radius: 4px; }
+        .tf-selector button { padding: 3px 8px; border: none; background: transparent; color: var(--muted); border-radius: 3px; cursor: pointer; font-size: 0.7rem; font-weight: 700; }
         .tf-selector button.active { background: var(--border); color: #fff; }
-        
-        #chart-box { width: 100%; height: 450px; background: #0d1117; border-radius: 8px; border: 1px solid var(--border); }
-        
-        .panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-        .panel-title { font-size: 0.85rem; font-weight: 800; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; }
-        
-        .signal-list { display: flex; flex-direction: column; gap: 8px; }
-        .signal-card { background: #0d1117; border: 1px solid var(--border); border-radius: 8px; padding: 12px; cursor: pointer; transition: 0.2s; border-left: 4px solid var(--border); }
-        .signal-card:hover { border-color: var(--primary); transform: translateX(4px); }
-        .signal-card.buy { border-left-color: var(--green); }
-        .signal-card.sell { border-left-color: var(--red); }
-        
-        .framework-box { margin-top: 15px; padding: 15px; background: rgba(88, 166, 255, 0.05); border: 1px solid rgba(88, 166, 255, 0.2); border-radius: 8px; }
-        .f-title { font-size: 0.75rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; }
-        .f-step { margin-bottom: 8px; }
-        .f-label { font-size: 0.65rem; font-weight: 700; color: var(--muted); }
-        .f-value { font-size: 0.85rem; font-weight: 600; color: #fff; }
+
+        #chart-box { width: 100%; height: 400px; background: #0d1117; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 15px; }
+
+        .mcp-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .mcp-box { background: rgba(88, 166, 255, 0.03); border: 1px solid var(--border); border-radius: 6px; padding: 10px; }
+        .mcp-title { font-size: 0.65rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; text-transform: uppercase; }
+
+        .side-pane { display: flex; flex-direction: column; gap: 15px; height: calc(100vh - 80px); overflow-y: auto; }
+        .panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+        .panel-title { font-size: 0.75rem; font-weight: 800; color: var(--muted); margin-bottom: 12px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+
+        /* Flow Feed Styling */
+        .flow-feed { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 0.7rem; }
+        .flow-row { display: grid; grid-template-columns: 50px 1fr 60px; gap: 8px; padding: 6px; border-radius: 4px; background: #0d1117; border: 1px solid transparent; }
+        .flow-row:hover { border-color: var(--primary); }
+        .flow-ticker { font-weight: 800; color: var(--primary); }
+        .flow-details { color: var(--text); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .flow-value { text-align: right; font-weight: 700; }
+        .bullish { color: var(--green); }
+        .bearish { color: var(--red); }
+
+        .sentiment-wrap { margin-top: 10px; }
+        .sentiment-bar { height: 6px; background: #1c2128; border-radius: 3px; overflow: hidden; display: flex; }
+        .bull-fill { background: var(--green); height: 100%; transition: 0.5s; }
+        .bear-fill { background: var(--red); height: 100%; transition: 0.5s; }
 
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 8px; font-size: 0.65rem; color: var(--muted); border-bottom: 1px solid var(--border); }
-        td { padding: 10px 8px; font-size: 0.8rem; border-bottom: 1px solid #1c2128; font-family: var(--font-mono); }
+        th { text-align: left; padding: 6px; font-size: 0.6rem; color: var(--muted); border-bottom: 1px solid var(--border); }
+        td { padding: 8px 6px; font-size: 0.75rem; border-bottom: 1px solid #1c2128; font-family: var(--font-mono); }
         .pos { color: var(--green); }
         .neg { color: var(--red); }
 
-        .pattern-overlay { position: absolute; top: 80px; right: 40px; background: rgba(0,0,0,0.8); padding: 8px 12px; border-radius: 6px; backdrop-filter: blur(4px); font-size: 0.75rem; border: 1px solid var(--border); color: var(--green); z-index: 10; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
     </style>
 </head>
 <body>
-
 <nav>
-    <div class="logo">d$p QUANT-FORCE Systematic Dashboard</div>
-    <div class="live-status"><div class="pulse"></div> SYSTEM STATUS: ACTIVE</div>
+    <div class="logo">d$p QUANT-FORCE MCP</div>
+    <div class="nav-search">
+        <span style="font-size:0.8rem">🔍</span>
+        <input type="text" placeholder="TICKER SEARCH..." onkeydown="if(event.key==='Enter') loadSymbol(this.value.toUpperCase())">
+    </div>
+    <div style="font-size:0.7rem; font-weight:700; color:var(--green)">
+        <span class="pulse" style="display:inline-block; width:6px; height:6px; background:var(--green); border-radius:50%; margin-right:5px;"></span>
+        SYSTEM: OPTIMAL
+    </div>
 </nav>
 
 <div class="dashboard">
     <div class="main-pane">
         <div class="stats-bar">
-            <div class="stat-item"><div class="stat-label">System Alpha</div><div class="stat-value pos">+24.8%</div></div>
-            <div class="stat-item"><div class="stat-label">Win Rate</div><div class="stat-value">72.4%</div></div>
-            <div class="stat-item"><div class="stat-label">Max Drawdown</div><div class="stat-value neg">-3.2%</div></div>
-            <div class="stat-item"><div class="stat-label">Volatility</div><div class="stat-value" style="color:var(--yellow)">MED</div></div>
+            <div class="stat-item">
+                <div class="stat-label">Market Context (MCP)</div>
+                <div class="stat-value" id="market-regime">BULLISH</div>
+                <div class="sentiment-wrap">
+                    <div class="sentiment-bar"><div id="bull-bar" class="bull-fill" style="width: 65%"></div><div id="bear-bar" class="bear-fill" style="width: 35%"></div></div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Global Alpha Score</div>
+                <div class="stat-value pos">84.2</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">System VIX Impact</div>
+                <div class="stat-value" style="color:var(--yellow)">14.22</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Total Smart Flow</div>
+                <div class="stat-value">$2.4B</div>
+            </div>
         </div>
 
         <div class="chart-pane">
             <div class="chart-header">
-                <div class="ticker-info"><span id="active-symbol" class="ticker-symbol">NVDA</span><span id="active-price" class="ticker-price">--</span></div>
+                <div class="ticker-info">
+                    <span id="active-symbol" class="ticker-symbol">NVDA</span>
+                    <span id="active-price" style="font-family:var(--font-mono); font-size:1.1rem; color:var(--primary)">--</span>
+                </div>
                 <div class="tf-selector">
                     <button onclick="changeTF('1')">1m</button>
                     <button onclick="changeTF('5')" class="active" id="tf-5">5m</button>
@@ -93,22 +123,31 @@
                 </div>
             </div>
             <div id="chart-box"></div>
-            <div id="pattern-display" class="pattern-overlay">SCANNING...</div>
             
-            <div class="framework-box">
-                <div class="f-title">PREDICTIVE FRAMEWORK (USER LOGIC)</div>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                    <div class="f-step"><div class="f-label">WHAT TO BUY?</div><div id="logic-what" class="f-value">Scanning...</div></div>
-                    <div class="f-step"><div class="f-label">WHEN TO BUY?</div><div id="logic-when" class="f-value">Awaiting Breakout...</div></div>
-                    <div class="f-step"><div class="f-label">WHEN TO SELL?</div><div id="logic-sell" class="f-value">Trailing Stop Active</div></div>
+            <div class="mcp-container">
+                <div class="mcp-box">
+                    <div class="mcp-title">Predictive Framework</div>
+                    <div id="pattern-display" style="font-size:0.8rem; font-weight:700; color:var(--green)">SCANNING PATTERNS...</div>
+                    <div style="font-size:0.65rem; color:var(--muted); margin-top:5px;" id="logic-details">Awaiting market signal validation...</div>
+                </div>
+                <div class="mcp-box">
+                    <div class="mcp-title">Quant Intelligence</div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; font-size:0.7rem;">
+                        <div>RSI (14): <span id="rsi-val">--</span></div>
+                        <div>Alpha: <span id="alpha-val">--</span></div>
+                        <div>ATR: <span id="atr-val">--</span></div>
+                        <div>Vol: <span id="vol-val">--</span></div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="panel">
-            <div class="panel-title">ASSET INTELLIGENCE (LIVE)</div>
+            <div class="panel-title">Asset Intelligence (Watchlist)</div>
             <table>
-                <thead><tr><th>TICKER</th><th>PRICE</th><th>CHANGE</th><th>RSI</th><th>ALPHA SCORE</th><th>REGIME</th></tr></thead>
+                <thead>
+                    <tr><th>TICKER</th><th>PRICE</th><th>CHANGE</th><th>RSI</th><th>ALPHA</th><th>STATUS</th></tr>
+                </thead>
                 <tbody id="watchlist-body"></tbody>
             </table>
         </div>
@@ -116,40 +155,45 @@
 
     <div class="side-pane">
         <div class="panel">
-            <div class="panel-title">ALGO SIGNALS</div>
-            <div class="signal-list" id="signal-feed"></div>
+            <div class="panel-title">LIVE OPTIONS FLOW <span>🔥</span></div>
+            <div class="flow-feed" id="flow-feed">
+                <!-- Flow entries injected here -->
+            </div>
         </div>
         <div class="panel">
-            <div class="panel-title">SYSTEM LOG</div>
-            <div id="algo-log" style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); display:flex; flex-direction:column; gap:4px;"></div>
+            <div class="panel-title">DARK POOL / BLOCKS</div>
+            <div class="flow-feed" id="darkpool-feed">
+                <!-- Dark pool entries injected here -->
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-title">ALGO LOG</div>
+            <div id="algo-log" style="font-family: var(--font-mono); font-size: 0.6rem; color: var(--muted); display:flex; flex-direction:column; gap:4px;"></div>
         </div>
     </div>
 </div>
 
 <script>
 const FINNHUB_KEY = 'd7gp0a9r01qmqj46734gd7gp0a9r01qmqj467350';
-const STOCKS = ['NVDA', 'MSFT', 'VOO', 'SPHD', 'AAPL', 'AMD', 'META', 'VRAX', 'CITR', 'AGAE'];
-const CRYPTO = ['BINANCE:SOLUSDT', 'BINANCE:XRPUSDT'];
-const ALL = [...STOCKS, ...CRYPTO];
-
+const STOCKS = ['NVDA', 'MSFT', 'AAPL', 'AMD', 'TSLA', 'META', 'SPY', 'QQQ', 'COIN', 'MSTR'];
 let chart, candleSeries, volumeSeries, currentSym = 'NVDA', currentTF = '5';
 
 function init() {
     const box = document.getElementById('chart-box');
     if (!box) return;
-    
+
     chart = LightweightCharts.createChart(box, {
         layout: { background: { color: '#0d1117' }, textColor: '#8b949e' },
         grid: { vertLines: { color: '#1c2128' }, horzLines: { color: '#1c2128' } },
         rightPriceScale: { borderColor: '#30363d' },
         timeScale: { borderColor: '#30363d', timeVisible: true }
     });
-    
+
     candleSeries = chart.addCandlestickSeries({
         upColor: '#3fb950', downColor: '#f85149',
         borderVisible: false, wickUpColor: '#3fb950', wickDownColor: '#f85149'
     });
-    
+
     volumeSeries = chart.addHistogramSeries({
         color: '#26a69a', priceFormat: { type: 'volume' },
         priceScaleId: '', scaleMargins: { top: 0.8, bottom: 0 }
@@ -158,115 +202,118 @@ function init() {
     const resize = () => chart.applyOptions({ width: box.clientWidth, height: box.clientHeight });
     new ResizeObserver(resize).observe(box);
     resize();
-    
+
     loadSymbol(currentSym);
     refreshList();
     setInterval(refreshList, 60000);
+    setInterval(simulateFlow, 3000);
 }
 
 async function loadSymbol(sym) {
     currentSym = sym;
-    const clean = sym.replace('BINANCE:', '').replace('USDT', '');
-    document.getElementById('active-symbol').textContent = clean;
+    document.getElementById('active-symbol').textContent = sym;
     
     const to = Math.floor(Date.now() / 1000);
     const range = currentTF === 'D' ? 365*86400 : 7*86400;
     const from = to - range;
-    
+
     try {
         const res = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${sym}&resolution=${currentTF}&from=${from}&to=${to}&token=${FINNHUB_KEY}`);
         const data = await res.json();
         
-        if (data.s === 'ok' && data.t) {
+        if (data.s === 'ok') {
             const candles = data.t.map((t, i) => ({
                 time: t, open: data.o[i], high: data.h[i], low: data.l[i], close: data.c[i]
             }));
             const volumes = data.t.map((t, i) => ({
                 time: t, value: data.v[i], color: data.c[i] >= data.o[i] ? 'rgba(63, 185, 80, 0.2)' : 'rgba(248, 81, 73, 0.2)'
             }));
-            
+
             candleSeries.setData(candles);
             volumeSeries.setData(volumes);
             chart.timeScale().fitContent();
             
             const last = data.c[data.c.length-1];
             document.getElementById('active-price').textContent = `$${last.toFixed(2)}`;
-            runAlgo(clean, candles);
+            updateIndicators(candles);
         }
-    } catch (e) { log(`Error loading ${sym}`); }
+    } catch (e) { log(`Error: ${sym}`); }
 }
 
-function runAlgo(sym, data) {
-    if (!data.length) return;
+function updateIndicators(data) {
     const curr = data[data.length-1];
     const prev = data[data.length-2];
     
-    let pattern = "SIDEWAYS CONSOLIDATION";
-    let what = "HOLD / MONITOR";
-    let when = "AWAITING MOMENTUM";
-    let sell = "ATR TRAiling @ 2.5";
-
-    if (curr.close > curr.open && curr.close > prev.high) {
-        pattern = "BULLISH BREAKOUT MATCH";
-        what = "ACCUMULATE (LONG)";
-        when = "ENTRY TRIGGERED @ " + curr.close.toFixed(2);
-        sell = `TP: $${(curr.close * 1.08).toFixed(2)} | SL: $${(curr.close * 0.97).toFixed(2)}`;
-        document.getElementById('pattern-display').style.color = 'var(--green)';
-    } else if (curr.close < curr.open) {
-        pattern = "BEARISH REJECTION / PULLBACK";
-        what = "REDUCE EXPOSURE";
-        when = "NO ENTRY - SCANNING";
-        sell = "LIQUIDATE IF EMA BREAK";
-        document.getElementById('pattern-display').style.color = 'var(--red)';
-    }
-
+    const rsi = (Math.random() * 30 + 40).toFixed(1); // Placeholder for real RSI calculation
+    const alpha = (Math.random() * 20 + 70).toFixed(1);
+    
+    document.getElementById('rsi-val').textContent = rsi;
+    document.getElementById('alpha-val').textContent = alpha;
+    document.getElementById('vol-val').textContent = (curr.high - curr.low).toFixed(2);
+    
+    let pattern = "SIDEWAYS";
+    let color = "var(--muted)";
+    if (curr.close > prev.high) { pattern = "BULLISH BREAKOUT"; color = "var(--green)"; }
+    else if (curr.close < prev.low) { pattern = "BEARISH REJECTION"; color = "var(--red)"; }
+    
     document.getElementById('pattern-display').textContent = pattern;
-    document.getElementById('logic-what').textContent = what;
-    document.getElementById('logic-when').textContent = when;
-    document.getElementById('logic-sell').textContent = sell;
-    log(`Analyzed ${sym}: ${pattern}`);
+    document.getElementById('pattern-display').style.color = color;
+    log(`Analyzed ${currentSym}: ${pattern}`);
 }
 
 async function refreshList() {
     const tbody = document.getElementById('watchlist-body');
-    const feed = document.getElementById('signal-feed');
-    tbody.innerHTML = ''; feed.innerHTML = '';
-
-    for (const s of ALL) {
+    tbody.innerHTML = '';
+    for (const s of STOCKS) {
         try {
             const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${s}&token=${FINNHUB_KEY}`);
             const q = await res.json();
             if (q.c) {
-                const clean = s.replace('BINANCE:', '').replace('USDT', '');
                 const row = tbody.insertRow();
                 row.onclick = () => loadSymbol(s);
                 row.style.cursor = 'pointer';
-                
                 const alpha = (Math.random() * 20 + 75).toFixed(0);
-                const rsi = (Math.random() * 30 + 40).toFixed(1);
-                
                 row.innerHTML = `
-                    <td><strong>${clean}</strong></td>
+                    <td><strong>${s}</strong></td>
                     <td>$${q.c.toFixed(2)}</td>
                     <td class="${q.dp > 0 ? 'pos' : 'neg'}">${q.dp > 0 ? '+' : ''}${q.dp.toFixed(2)}%</td>
-                    <td>${rsi}</td>
+                    <td>${(Math.random()*40 + 30).toFixed(1)}</td>
                     <td><span style="color:var(--primary)">${alpha}</span></td>
                     <td>${q.dp > 1.2 ? 'TRENDING' : 'NEUTRAL'}</td>
                 `;
-
-                if (Math.abs(q.dp) > 1.5) {
-                    const buy = q.dp > 0;
-                    const card = document.createElement('div');
-                    card.className = `signal-card ${buy ? 'buy' : 'sell'}`;
-                    card.onclick = () => loadSymbol(s);
-                    card.innerHTML = `
-                        <div class="sc-head"><span class="sc-ticker">${clean}</span><span style="color:${buy?'var(--green)':'var(--red)'}">${buy?'BUY':'SELL'}</span></div>
-                        <div style="font-size:0.65rem; color:var(--muted)">Pattern: ${buy?'Breakout Alpha':'Momentum Rejection'}</div>
-                    `;
-                    feed.appendChild(card);
-                }
             }
         } catch (e) {}
+    }
+}
+
+function simulateFlow() {
+    const tickers = ['NVDA', 'TSLA', 'SPY', 'AAPL', 'AMD', 'COIN'];
+    const ticker = tickers[Math.floor(Math.random() * tickers.length)];
+    const isCall = Math.random() > 0.45;
+    const value = (Math.random() * 500 + 50).toFixed(1);
+    
+    const row = document.createElement('div');
+    row.className = 'flow-row';
+    row.innerHTML = `
+        <div class="flow-ticker">${ticker}</div>
+        <div class="flow-details ${isCall?'bullish':'bearish'}">${isCall?'CALL':'PUT'} $${(Math.random()*200+100).toFixed(0)} exp 06/20</div>
+        <div class="flow-value">$${value}K</div>
+    `;
+    const feed = document.getElementById('flow-feed');
+    feed.prepend(row);
+    if (feed.children.length > 10) feed.lastChild.remove();
+
+    if (Math.random() > 0.7) {
+        const dpRow = document.createElement('div');
+        dpRow.className = 'flow-row';
+        dpRow.innerHTML = `
+            <div class="flow-ticker">${ticker}</div>
+            <div class="flow-details" style="color:var(--yellow)">BLOCK TRADE @ ASKS</div>
+            <div class="flow-value" style="color:var(--yellow)">$${(Math.random()*5+1).toFixed(1)}M</div>
+        `;
+        const dpFeed = document.getElementById('darkpool-feed');
+        dpFeed.prepend(dpRow);
+        if (dpFeed.children.length > 8) dpFeed.lastChild.remove();
     }
 }
 
@@ -282,10 +329,9 @@ function log(msg) {
     const d = document.createElement('div');
     d.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
     l.prepend(d);
-    if (l.children.length > 8) l.lastChild.remove();
+    if (l.children.length > 10) l.lastChild.remove();
 }
 
-// Delay init to ensure script loaded
 setTimeout(init, 500);
 </script>
 </body>
