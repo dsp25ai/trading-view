@@ -20,131 +20,33 @@
             --font-mono: 'JetBrains Mono', monospace;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg); 
-            color: var(--text); 
-            line-height: 1.6;
-        }
-        nav {
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            padding: 10px 24px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 24px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
-        .nav-search {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 4px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 300px;
-        }
-        .nav-search input {
-            background: transparent;
-            border: none;
-            color: var(--text);
-            outline: none;
-            font-size: 0.8rem;
-            width: 100%;
-        }
-        .dashboard {
-            max-width: 1800px;
-            margin: 15px auto;
-            padding: 0 15px;
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 15px;
-        }
+        .nav-search { background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; display: flex; align-items: center; gap: 8px; width: 300px; }
+        .nav-search input { background: transparent; border: none; color: var(--text); outline: none; font-size: 0.8rem; width: 100%; }
+        .dashboard { max-width: 1800px; margin: 15px auto; padding: 0 15px; display: grid; grid-template-columns: 1fr 400px; gap: 15px; }
         .main-pane { display: flex; flex-direction: column; gap: 15px; }
         .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .stat-item {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: 8px;
-        }
+        .stat-item { background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 8px; }
         .stat-label { font-size: 0.65rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
         .stat-value { font-family: var(--font-mono); font-size: 1.2rem; font-weight: 700; margin-top: 4px; }
-        .chart-pane {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 15px;
-            min-height: 550px;
-        }
+        .chart-pane { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 15px; min-height: 550px; }
         .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .ticker-info { display: flex; align-items: center; gap: 10px; }
         .ticker-symbol { font-size: 1.4rem; font-weight: 800; }
         .tf-selector { display: flex; gap: 2px; background: #f0f0f0; padding: 2px; border-radius: 4px; }
-        .tf-selector button {
-            padding: 3px 8px;
-            border: none;
-            background: transparent;
-            color: var(--muted);
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
+        .tf-selector button { padding: 3px 8px; border: none; background: transparent; color: var(--muted); border-radius: 3px; cursor: pointer; font-size: 0.7rem; font-weight: 700; }
         .tf-selector button.active { background: #fff; color: var(--primary); }
-        #chart-box {
-            width: 100%;
-            height: 400px;
-            background: #fff;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            margin-bottom: 15px;
-        }
+        #chart-box { width: 100%; height: 400px; background: #fff; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 15px; }
         .mcp-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .mcp-box {
-            background: rgba(9, 105, 218, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 10px;
-        }
+        .mcp-box { background: rgba(9, 105, 218, 0.03); border: 1px solid var(--border); border-radius: 6px; padding: 10px; }
         .mcp-title { font-size: 0.65rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; text-transform: uppercase; }
-        .side-pane {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            height: calc(100vh - 80px);
-            overflow-y: auto;
-        }
-        .panel {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px;
-        }
-        .panel-title {
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: var(--muted);
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 6px;
-        }
+        .side-pane { display: flex; flex-direction: column; gap: 15px; height: calc(100vh - 80px); overflow-y: auto; }
+        .panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+        .panel-title { font-size: 0.75rem; font-weight: 800; color: var(--muted); margin-bottom: 12px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
         .flow-feed { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 0.7rem; }
-        .flow-row {
-            display: grid;
-            grid-template-columns: 50px 1fr 60px;
-            gap: 8px;
-            padding: 6px;
-            border-radius: 4px;
-            background: #f6f8fa;
-            border: 1px solid transparent;
-        }
+        .flow-row { display: grid; grid-template-columns: 50px 1fr 60px; gap: 8px; padding: 6px; border-radius: 4px; background: #f6f8fa; border: 1px solid transparent; }
         .flow-row:hover { border-color: var(--primary); }
         .flow-ticker { font-weight: 800; color: var(--primary); }
         .flow-details { color: var(--text); }
@@ -230,14 +132,7 @@
                 <div class="panel-title">Asset Intelligence (Watchlist)</div>
                 <table>
                     <thead>
-                        <tr>
-                            <th>TICKER</th>
-                            <th>PRICE</th>
-                            <th>CHANGE</th>
-                            <th>RSI</th>
-                            <th>ALPHA</th>
-                            <th>STATUS</th>
-                        </tr>
+                        <tr><th>TICKER</th><th>PRICE</th><th>CHANGE</th><th>RSI</th><th>ALPHA</th><th>STATUS</th></tr>
                     </thead>
                     <tbody id="watchlist-body"></tbody>
                 </table>
@@ -265,27 +160,49 @@
     </div>
 
     <script>
-        const FINNHUB_KEY = 'd7gp0a9r01qmqj46734gd7gp0a9r01qmqj467350';
-        const STOCKS = ['NVDA', 'TSLA', 'SPY', 'AAPL', 'AMD', 'COIN', 'MSFT', 'META', 'MSTR', 'QQQ'];
-        let chart, candleSeries, volumeSeries, currentSym = 'NVDA', currentTF = '5';
+const FINNHUB_KEY = 'd7gp0a9r01qmqj46734gd7gp0a9r01qmqj467350';
+const STOCKS = ['NVDA', 'TSLA', 'SPY', 'AAPL', 'AMD', 'COIN', 'MSFT', 'META', 'MSTR', 'QQQ'];
+let chart, candleSeries, volumeSeries, currentSym = 'NVDA', currentTF = '5';
 
-        function init() {
-            const box = document.getElementById('chart-box');
-            chart = LightweightCharts.createChart(box, {
-                layout: { background: { color: '#ffffff' }, textColor: '#57606a' },
-                grid: { vertLines: { color: '#f0f0f0' }, horzLines: { color: '#f0f0f0' } },
-                rightPriceScale: { borderColor: '#d0d7de' },
-                timeScale: { borderColor: '#d0d7de', timeVisible: true }
-            });
+function init() {
+    const box = document.getElementById('chart-box');
+    chart = LightweightCharts.createChart(box, {
+        layout: { background: { color: '#ffffff' }, textColor: '#57606a' },
+        grid: { vertLines: { color: '#f0f0f0' }, horzLines: { color: '#f0f0f0' } },
+        rightPriceScale: { borderColor: '#d0d7de' },
+        timeScale: { borderColor: '#d0d7de', timeVisible: true }
+    });
 
-            candleSeries = chart.addCandlestickSeries({
-                upColor: '#1a7f37', downColor: '#cf222e', borderVisible: false,
-                wickUpColor: '#1a7f37', wickDownColor: '#cf222e'
-            });
+    candleSeries = chart.addCandlestickSeries({
+        upColor: '#1a7f37', downColor: '#cf222e', borderVisible: false,
+        wickUpColor: '#1a7f37', wickDownColor: '#cf222e'
+    });
 
-            volumeSeries = chart.addHistogramSeries({
-                color: '#26a69a', priceFormat: { type: 'volume' },
-                priceScaleId: '', scaleMargins: { top: 0.8, bottom: 0 }
-            });
+    volumeSeries = chart.addHistogramSeries({
+        color: '#26a69a', priceFormat: { type: 'volume' },
+        priceScaleId: '', scaleMargins: { top: 0.8, bottom: 0 }
+    });
 
-            new ResizeObserver(() => chart.applyOptions({ width: box.clientWidth, height: box.clientHeight })).observe
+    new ResizeObserver(() => chart.applyOptions({ width: box.clientWidth, height: box.clientHeight })).observe(box);
+    chart.applyOptions({ width: box.clientWidth, height: box.clientHeight });
+
+    loadSymbol(currentSym);
+    refreshList();
+    refreshStats();
+    setInterval(refreshList, 60000);
+    setInterval(refreshStats, 5000);
+    setInterval(simulateFlow, 3000);
+}
+
+async function loadSymbol(sym) {
+    currentSym = sym;
+    document.getElementById('active-symbol').textContent = sym;
+    const to = Math.floor(Date.now() / 1000);
+    const range = currentTF === 'D' ? 365*86400 : 7*86400;
+    const from = to - range;
+
+    try {
+        const res = await fetch('https://finnhub.io/api/v1/stock/candle?symbol=' + sym + '&resolution=' + currentTF + '&from=' + from + '&to=' + to + '&token=' + FINNHUB_KEY);
+        const data = await res.json();
+        if (data.s === 'ok') {
+            const candles = data.t.map((t, i) => ({ time: t, open: data.o[i], high: data.h
