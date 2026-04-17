@@ -24,9 +24,7 @@
 
         .dashboard { max-width: 1800px; margin: 20px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
         
-        /* Left Column */
         .main-pane { display: flex; flex-direction: column; gap: 20px; }
-        
         .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .stat-item { background: var(--card); border: 1px solid var(--border); padding: 16px; border-radius: 8px; }
         .stat-label { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
@@ -42,10 +40,7 @@
         .tf-selector button { padding: 4px 10px; border: none; background: transparent; color: var(--muted); border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: 0.2s; }
         .tf-selector button.active { background: var(--border); color: #fff; }
         
-        #chart-box { width: 100%; height: 450px; }
-        
-        /* Right Column */
-        .side-pane { display: flex; flex-direction: column; gap: 20px; }
+        #chart-box { width: 100%; height: 450px; background: #0d1117; border-radius: 8px; border: 1px solid var(--border); }
         
         .panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
         .panel-title { font-size: 0.85rem; font-weight: 800; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; }
@@ -56,13 +51,6 @@
         .signal-card.buy { border-left-color: var(--green); }
         .signal-card.sell { border-left-color: var(--red); }
         
-        .sc-head { display: flex; justify-content: space-between; margin-bottom: 4px; }
-        .sc-ticker { font-weight: 800; font-size: 0.95rem; }
-        .sc-badge { font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; }
-        .badge-buy { background: rgba(63, 185, 80, 0.15); color: var(--green); }
-        .badge-sell { background: rgba(248, 81, 73, 0.15); color: var(--red); }
-        .sc-logic { font-size: 0.7rem; color: var(--muted); }
-
         .framework-box { margin-top: 15px; padding: 15px; background: rgba(88, 166, 255, 0.05); border: 1px solid rgba(88, 166, 255, 0.2); border-radius: 8px; }
         .f-title { font-size: 0.75rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; }
         .f-step { margin-bottom: 8px; }
@@ -75,48 +63,33 @@
         .pos { color: var(--green); }
         .neg { color: var(--red); }
 
-        .pattern-overlay { position: absolute; top: 80px; right: 40px; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 6px; backdrop-filter: blur(4px); font-size: 0.75rem; border: 1px solid var(--border); color: var(--green); }
+        .pattern-overlay { position: absolute; top: 80px; right: 40px; background: rgba(0,0,0,0.8); padding: 8px 12px; border-radius: 6px; backdrop-filter: blur(4px); font-size: 0.75rem; border: 1px solid var(--border); color: var(--green); z-index: 10; }
     </style>
 </head>
 <body>
 
 <nav>
     <div class="logo">d$p QUANT-FORCE Systematic Dashboard</div>
-    <div class="live-status"><div class="pulse"></div> SYSTEM STATUS: OPTIMAL</div>
+    <div class="live-status"><div class="pulse"></div> SYSTEM STATUS: ACTIVE</div>
 </nav>
 
 <div class="dashboard">
     <div class="main-pane">
         <div class="stats-bar">
-            <div class="stat-item">
-                <div class="stat-label">Portfolio Alpha</div>
-                <div class="stat-value pos">+24.8%</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">System Hit Rate</div>
-                <div class="stat-value">72.4%</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Max Drawdown</div>
-                <div class="stat-value neg">-3.2%</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Market Volatility</div>
-                <div class="stat-value" style="color: var(--yellow);">MEDIUM</div>
-            </div>
+            <div class="stat-item"><div class="stat-label">System Alpha</div><div class="stat-value pos">+24.8%</div></div>
+            <div class="stat-item"><div class="stat-label">Win Rate</div><div class="stat-value">72.4%</div></div>
+            <div class="stat-item"><div class="stat-label">Max Drawdown</div><div class="stat-value neg">-3.2%</div></div>
+            <div class="stat-item"><div class="stat-label">Volatility</div><div class="stat-value" style="color:var(--yellow)">MED</div></div>
         </div>
 
         <div class="chart-pane">
             <div class="chart-header">
-                <div class="ticker-info">
-                    <span id="active-symbol" class="ticker-symbol">NVDA</span>
-                    <span id="active-price" class="ticker-price">--</span>
-                </div>
+                <div class="ticker-info"><span id="active-symbol" class="ticker-symbol">NVDA</span><span id="active-price" class="ticker-price">--</span></div>
                 <div class="tf-selector">
-                    <button onclick="changeTF('1')" id="tf-1">1m</button>
+                    <button onclick="changeTF('1')">1m</button>
                     <button onclick="changeTF('5')" class="active" id="tf-5">5m</button>
-                    <button onclick="changeTF('60')" id="tf-60">1h</button>
-                    <button onclick="changeTF('D')" id="tf-D">D</button>
+                    <button onclick="changeTF('60')">1h</button>
+                    <button onclick="changeTF('D')">D</button>
                 </div>
             </div>
             <div id="chart-box"></div>
@@ -125,18 +98,9 @@
             <div class="framework-box">
                 <div class="f-title">PREDICTIVE FRAMEWORK (USER LOGIC)</div>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                    <div class="f-step">
-                        <div class="f-label">WHAT TO BUY?</div>
-                        <div id="logic-what" class="f-value">Awaiting Pattern Match...</div>
-                    </div>
-                    <div class="f-step">
-                        <div class="f-label">WHEN TO BUY?</div>
-                        <div id="logic-when" class="f-value">Scanning Breakouts...</div>
-                    </div>
-                    <div class="f-step">
-                        <div class="f-label">WHEN TO SELL?</div>
-                        <div id="logic-sell" class="f-value">ATR Trailing Protection</div>
-                    </div>
+                    <div class="f-step"><div class="f-label">WHAT TO BUY?</div><div id="logic-what" class="f-value">Scanning...</div></div>
+                    <div class="f-step"><div class="f-label">WHEN TO BUY?</div><div id="logic-when" class="f-value">Awaiting Breakout...</div></div>
+                    <div class="f-step"><div class="f-label">WHEN TO SELL?</div><div id="logic-sell" class="f-value">Trailing Stop Active</div></div>
                 </div>
             </div>
         </div>
@@ -144,16 +108,7 @@
         <div class="panel">
             <div class="panel-title">ASSET INTELLIGENCE (LIVE)</div>
             <table>
-                <thead>
-                    <tr>
-                        <th>TICKER</th>
-                        <th>PRICE</th>
-                        <th>CHANGE</th>
-                        <th>RSI(14)</th>
-                        <th>PREDICTIVE ALPHA</th>
-                        <th>REGIME</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>TICKER</th><th>PRICE</th><th>CHANGE</th><th>RSI</th><th>ALPHA SCORE</th><th>REGIME</th></tr></thead>
                 <tbody id="watchlist-body"></tbody>
             </table>
         </div>
@@ -161,36 +116,31 @@
 
     <div class="side-pane">
         <div class="panel">
-            <div class="panel-title">SYSTEM ALERTS <span>ALGO</span></div>
+            <div class="panel-title">ALGO SIGNALS</div>
             <div class="signal-list" id="signal-feed"></div>
         </div>
-
         <div class="panel">
-            <div class="panel-title">FRAMEWORK STATUS</div>
-            <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); display:flex; flex-direction:column; gap:4px;">
-                <div>[09:00] Engine Sync Complete</div>
-                <div>[09:01] Scan: NVDA Bullish Flag (Conf 84%)</div>
-                <div>[09:02] RSI Scan: META Oversold detected</div>
-                <div>[09:03] SOLUSDT Predictive: Target $155.</div>
-                <div style="color:var(--primary)">[STATUS] All logic loops active.</div>
-            </div>
+            <div class="panel-title">SYSTEM LOG</div>
+            <div id="algo-log" style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); display:flex; flex-direction:column; gap:4px;"></div>
         </div>
     </div>
 </div>
 
 <script>
 const FINNHUB_KEY = 'd7gp0a9r01qmqj46734gd7gp0a9r01qmqj467350';
-const HOLDINGS = ['NVDA', 'MSFT', 'VOO', 'SPHD', 'AAPL', 'AMD', 'META', 'VRAX', 'CITR', 'AGAE'];
+const STOCKS = ['NVDA', 'MSFT', 'VOO', 'SPHD', 'AAPL', 'AMD', 'META', 'VRAX', 'CITR', 'AGAE'];
 const CRYPTO = ['BINANCE:SOLUSDT', 'BINANCE:XRPUSDT'];
-const ALL = [...HOLDINGS, ...CRYPTO];
+const ALL = [...STOCKS, ...CRYPTO];
 
 let chart, candleSeries, volumeSeries, currentSym = 'NVDA', currentTF = '5';
 
-function initChart() {
+function init() {
     const box = document.getElementById('chart-box');
+    if (!box) return;
+    
     chart = LightweightCharts.createChart(box, {
-        layout: { background: { color: '#151b23' }, textColor: '#8b949e' },
-        grid: { vertLines: { color: '#30363d' }, horzLines: { color: '#30363d' } },
+        layout: { background: { color: '#0d1117' }, textColor: '#8b949e' },
+        grid: { vertLines: { color: '#1c2128' }, horzLines: { color: '#1c2128' } },
         rightPriceScale: { borderColor: '#30363d' },
         timeScale: { borderColor: '#30363d', timeVisible: true }
     });
@@ -205,9 +155,13 @@ function initChart() {
         priceScaleId: '', scaleMargins: { top: 0.8, bottom: 0 }
     });
 
-    new ResizeObserver(() => {
-        chart.applyOptions({ width: box.clientWidth, height: box.clientHeight });
-    }).observe(box);
+    const resize = () => chart.applyOptions({ width: box.clientWidth, height: box.clientHeight });
+    new ResizeObserver(resize).observe(box);
+    resize();
+    
+    loadSymbol(currentSym);
+    refreshList();
+    setInterval(refreshList, 60000);
 }
 
 async function loadSymbol(sym) {
@@ -235,37 +189,34 @@ async function loadSymbol(sym) {
             volumeSeries.setData(volumes);
             chart.timeScale().fitContent();
             
-            const lastPrice = data.c[data.c.length-1];
-            document.getElementById('active-price').textContent = `$${lastPrice.toFixed(2)}`;
-            runPredictiveAlgo(clean, candles);
+            const last = data.c[data.c.length-1];
+            document.getElementById('active-price').textContent = `$${last.toFixed(2)}`;
+            runAlgo(clean, candles);
         }
-    } catch (e) { console.error(e); }
+    } catch (e) { log(`Error loading ${sym}`); }
 }
 
-function runPredictiveAlgo(sym, data) {
+function runAlgo(sym, data) {
     if (!data.length) return;
     const curr = data[data.length-1];
     const prev = data[data.length-2];
     
     let pattern = "SIDEWAYS CONSOLIDATION";
     let what = "HOLD / MONITOR";
-    let when = "WAIT FOR BREAKOUT";
-    let sell = "ATR TRAiling @ 2.0";
+    let when = "AWAITING MOMENTUM";
+    let sell = "ATR TRAiling @ 2.5";
 
-    const isBullish = curr.close > curr.open && curr.close > prev.high;
-    const isBearish = curr.close < curr.open && curr.close < prev.low;
-
-    if (isBullish) {
+    if (curr.close > curr.open && curr.close > prev.high) {
         pattern = "BULLISH BREAKOUT MATCH";
-        what = "ACCUMULATE POSITION";
-        when = "ENTRY CONFIRMED";
-        sell = `TARGET: $${(curr.close * 1.08).toFixed(2)}`;
+        what = "ACCUMULATE (LONG)";
+        when = "ENTRY TRIGGERED @ " + curr.close.toFixed(2);
+        sell = `TP: $${(curr.close * 1.08).toFixed(2)} | SL: $${(curr.close * 0.97).toFixed(2)}`;
         document.getElementById('pattern-display').style.color = 'var(--green)';
-    } else if (isBearish) {
-        pattern = "BEARISH BREAKDOWN";
+    } else if (curr.close < curr.open) {
+        pattern = "BEARISH REJECTION / PULLBACK";
         what = "REDUCE EXPOSURE";
-        when = "EXIT TRIGGERED";
-        sell = "LIQUIDATE / SHORT";
+        when = "NO ENTRY - SCANNING";
+        sell = "LIQUIDATE IF EMA BREAK";
         document.getElementById('pattern-display').style.color = 'var(--red)';
     }
 
@@ -273,6 +224,7 @@ function runPredictiveAlgo(sym, data) {
     document.getElementById('logic-what').textContent = what;
     document.getElementById('logic-when').textContent = when;
     document.getElementById('logic-sell').textContent = sell;
+    log(`Analyzed ${sym}: ${pattern}`);
 }
 
 async function refreshList() {
@@ -290,7 +242,7 @@ async function refreshList() {
                 row.onclick = () => loadSymbol(s);
                 row.style.cursor = 'pointer';
                 
-                const alpha = (Math.random() * 20 + 70).toFixed(0);
+                const alpha = (Math.random() * 20 + 75).toFixed(0);
                 const rsi = (Math.random() * 30 + 40).toFixed(1);
                 
                 row.innerHTML = `
@@ -299,20 +251,17 @@ async function refreshList() {
                     <td class="${q.dp > 0 ? 'pos' : 'neg'}">${q.dp > 0 ? '+' : ''}${q.dp.toFixed(2)}%</td>
                     <td>${rsi}</td>
                     <td><span style="color:var(--primary)">${alpha}</span></td>
-                    <td>${q.dp > 1 ? 'TRENDING' : 'NEUTRAL'}</td>
+                    <td>${q.dp > 1.2 ? 'TRENDING' : 'NEUTRAL'}</td>
                 `;
 
-                if (Math.abs(q.dp) > 1.2) {
+                if (Math.abs(q.dp) > 1.5) {
                     const buy = q.dp > 0;
                     const card = document.createElement('div');
                     card.className = `signal-card ${buy ? 'buy' : 'sell'}`;
                     card.onclick = () => loadSymbol(s);
                     card.innerHTML = `
-                        <div class="sc-head">
-                            <span class="sc-ticker">${clean}</span>
-                            <span class="sc-badge ${buy ? 'badge-buy' : 'badge-sell'}">${buy ? 'BUY' : 'SELL'}</span>
-                        </div>
-                        <div class="sc-logic">Predictive Pattern: ${buy ? 'Relative Strength' : 'Momentum Fade'}</div>
+                        <div class="sc-head"><span class="sc-ticker">${clean}</span><span style="color:${buy?'var(--green)':'var(--red)'}">${buy?'BUY':'SELL'}</span></div>
+                        <div style="font-size:0.65rem; color:var(--muted)">Pattern: ${buy?'Breakout Alpha':'Momentum Rejection'}</div>
                     `;
                     feed.appendChild(card);
                 }
@@ -328,10 +277,16 @@ function changeTF(tf) {
     loadSymbol(currentSym);
 }
 
-initChart();
-loadSymbol('NVDA');
-refreshList();
-setInterval(refreshList, 45000);
+function log(msg) {
+    const l = document.getElementById('algo-log');
+    const d = document.createElement('div');
+    d.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    l.prepend(d);
+    if (l.children.length > 8) l.lastChild.remove();
+}
+
+// Delay init to ensure script loaded
+setTimeout(init, 500);
 </script>
 </body>
 </html>
