@@ -81,7 +81,7 @@ nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 
 <div class="section-title">Asset Intelligence (Watchlist)</div>
 <table class="watchlist-table">
 <thead><tr><th>TICKER</th><th>PRICE</th><th>CHANGE</th><th>RSI</th><th>ALPHA</th><th>STATUS</th></tr></thead>
-<tbody id="watchlistBody"></tbody>
+<tbody id="watchlist-body"></tbody>
 </table>
 </div>
 <div class="panel-section">
@@ -90,11 +90,11 @@ nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 
 </div>
 <div class="panel-section">
 <div class="section-title">DARK POOL/BLOCKS</div>
-<div id="darkPoolLog"></div>
+<div id="darkpool-feed"></div>
 </div>
 <div class="panel-section">
 <div class="section-title">ALGO LOG</div>
-<div id="algoLog"></div>
+<div id="algo-log"></div>
 </div>
 </div>
 </div>
@@ -172,7 +172,7 @@ candleSeries.setData(candles);
 
 async function updateWatchlist() {
 const symbols = ['AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL'];
-const tbody = document.getElementById('watchlistBody');
+const tbody = document.getElementById('watchlist-body');
 tbody.innerHTML = '';
 for (const sym of symbols) {
 const quote = await fetchQuote(sym);
@@ -209,8 +209,8 @@ const algoMessages = [
 ];
 const darkMsg = darkPoolMessages[Math.floor(Math.random() * darkPoolMessages.length)];
 const algoMsg = algoMessages[Math.floor(Math.random() * algoMessages.length)];
-addLogEntry('darkPoolLog', darkMsg);
-addLogEntry('algoLog', algoMsg);
+addLogEntry('darkpool-feed', darkMsg);
+addLogEntry('algo-log', algoMsg);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
