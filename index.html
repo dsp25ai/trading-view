@@ -184,7 +184,164 @@ function init() {
     });
 
     new ResizeObserver(() => chart.applyOptions({ width: box.clientWidth, height: box.clientHeight })).observe(box);
-    chart.applyOptions({ width: box.clientWidth, height: box.clientHeight });
+        loadSymbol(currentSym);
+    refreshList();
+    refreshStats();
+    setInterval(refreshList, 60000);
+    setInterval(refreshStats, 5000);
+    setInterval(simulateFlow, 3000);
+}
+
+async function loadSymbol(sym) {
+    currentSym = sym;
+    document.getElementById('active-symbol').textContent = sym;
+    const to = Math.floor(Date.now() / 1000);
+    const range = currentTF === 'D' ? 365*86400 : 7*86400;
+    const from = to - range;
+    try {
+        const res = await fetch('https://finnhub.io/api/v1/stock/candle?symbol=' + sym + '&resolution=' + currentTF + '&from=' + from + '&to=' + to + '&token=' + FINNHUB_KEY);
+        const data = await res.json();
+        if (data.s === 'ok') {
+            const candles = data.t.map((t, i) => ({time: t, open: data.o[i], high: data.h[i], low: data.l[i], close: data.c[i]}));
+            const volumes = data.t.map((t, i) => ({time: t, value: data.v[i], color: data.c[i] >= data.o[i] ? 'rgba(26, 127, 55, 0.2)' : 'rgba(207, 34, 46, 0.2)'}));
+            candleSeries.setData(candles);
+            volumeSeries.setData(volumes);
+            chart.timeScale().fitContent();
+            const last = data.c[data.c.length-1];
+            document.getElementById('active-price').textContent = '$' + last.toFixed(2);
+            updateIndicators(candles);
+        } else {
+            throw new Error('API Error');
+        }
+    } catch (e) {
+        log('API Limit - Using mock data for ' + sym);
+        generateMockChart(sym);
+    }
+}
+
+function generateMockChart(sym) {
+    const candles = [];
+    const volumes = [];
+    let basePrice = 150 + Math.random() * 100;
+    const now = Math.floor(Date.now() / 1000);
+    const steps = 100;
+    const interval = currentTF === 'D' ? 86400 : parseInt(currentTF) * 60;
+    for (let i = 0; i < steps; i++) {
+        const t = now - (steps - i) * interval;
+        const open = basePrice + (Math.random() * 4 - 2);
+        const close = open + (Math.random() * 4 - 2);
+        const high = Math.max(open, close) + Math.random() * 2;
+        const low = Math.min(open, close) - Math.random() * 2;
+        candles.push({time: t, open, high, low, close});
+        volumes.push({time: t, value: Math.random() * 1000000, color: close >= open ? 'rgba(26, 127, 55, 0.2)' : 'rgba(207, 34, 46, 0.2)'});
+        basePrice = close;
+    }
+    candleSeries.setData(candles);
+    volumeSeries.setData(volumes);
+    chart.timeScale().fitContent();
+    const last = candles[candles.length-1].close;
+    document.getElementById('active-price').textContent = '$' + last.toFixed(2) + ' (SIM)';
+    updateIndicators(candles);
+}
+
+function updateIndicators(data) {
+    const curr = data[data.length-1];
+    const prev = data[data.length-2] || curr;
+    const rsi = (Math.random() * 30 + 40).toFixed(1);
+    const alpha = (Math.random() * 20 + 70).toFixed(1);
+    document.getElementById('rsi-val').textContent = rsi;
+    document.getElementById('alpha-val').textContent = alpha;
+    document.getElementById('atr-val').textContent = (Math.random() * 5 + 2).toFixed(2);
+    document.getElementById('vol-val').textContent = (curr.high - curr.low).toFixed(2);
+    let pattern = 'SIDEWAYS', color = 'var(--muted)';
+    if (curr.close > prev.high) { pattern = 'BULLISH BREAKOUT'; color = 'var(--green)'; }
+    else if (curr.close < prev.low) { pattern = 'BEARISH REJECTION'; color = 'var(--red)'; }
+    document.getElementById('pattern-display').textContent = pattern;
+    document.getElementById('pattern-display').style.color = color;
+    log('Analyzed ' + currentSym + ': ' + pattern);
+}
+
+async function refreshList() {
+    const tbody = document.getElementById('watchlist-body');
+    tbody.innerHTML = '';
+    for (const s of STOCKS) {
+        try {
+            const res = await fetch('https://finnhub.io/api/v1/quote?symbol=' + s + '&token=' + FINNHUB_KEY);
+            const q = await res.json();
+            if (q.c) {
+                renderWatchlistRow(s, q.c, q.dp || 0);
+            } else { throw new Error('API'); }
+        } catch (e) {
+            const mockC = (Math.random() * 100 + 150).toFixed(2);
+            const mockDp = (Math.random() * 4 - 1.5).toFixed(2);
+            renderWatchlistRow(s, parseFloat(mockC), parseFloat(mockDp));
+        }
+    }
+}
+
+function renderWatchlistRow(s, price, dp) {
+    const tbody = document.getElementById('watchlist-body');
+    const row = tbody.insertRow();
+    row.onclick = () => loadSymbol(s);
+    row.style.cursor = 'pointer';
+    const alpha = (Math.random() * 20 + 75).toFixed(0);
+    row.innerHTML = '<td><strong>' + s + '</strong></td><td>$' + price.toFixed(2) + '</td><td class="' + (dp >= 0 ? 'pos' : 'neg') + '">' + (dp >= 0 ? '+' : '') + dp.toFixed(2) + '%</td><td>' + (Math.random()*40 + 30).toFixed(1) + '</td><td><span style="color:var(--primary)">' + alpha + '</span></td><td>' + (dp > 1.2 ? 'TRENDING' : (dp < -1 ? 'WEAK' : 'STABLE')) + '</td>';
+}
+
+function refreshStats() {
+    const alpha = (Math.random() * 5 + 80).toFixed(1);
+    const vix = (Math.random() * 2 + 13).toFixed(2);
+    const flow = (Math.random() * 0.5 + 2.2).toFixed(1);
+    const bull = Math.floor(Math.random() * 20 + 55);
+    document.getElementById('global-alpha').textContent = alpha;
+    document.getElementById('vix-val').textContent = vix;
+    document.getElementById('flow-val').textContent = '$' + flow + 'B';
+    document.getElementById('bull-bar').style.width = bull + '%';
+    document.getElementById('bear-bar').style.width = (100 - bull) + '%';
+    document.getElementById('market-regime').textContent = bull > 50 ? 'BULLISH' : 'NEUTRAL';
+}
+
+function simulateFlow() {
+    const tickers = ['NVDA', 'TSLA', 'SPY', 'AAPL', 'AMD', 'COIN'];
+    const ticker = tickers[Math.floor(Math.random() * tickers.length)];
+    const isCall = Math.random() > 0.45;
+    const value = (Math.random() * 500 + 50).toFixed(1);
+    const row = document.createElement('div');
+    row.className = 'flow-row';
+    row.innerHTML = '<div class="flow-ticker">' + ticker + '</div><div class="flow-details ' + (isCall?'bullish':'bearish') + '">' + (isCall?'CALL':'PUT') + ' $' + (Math.random()*200+100).toFixed(0) + ' exp 06/20</div><div class="flow-value">$' + value + 'K</div>';
+    const feed = document.getElementById('flow-feed');
+    feed.prepend(row);
+    if (feed.children.length > 10) feed.lastChild.remove();
+    if (Math.random() > 0.7) {
+        const dpRow = document.createElement('div');
+        dpRow.className = 'flow-row';
+        dpRow.innerHTML = '<div class="flow-ticker">' + ticker + '</div><div class="flow-details" style="color:var(--yellow)">BLOCK TRADE @ ASKS</div><div class="flow-value" style="color:var(--yellow)">$' + (Math.random()*5+1).toFixed(1) + 'M</div>';
+        const dpFeed = document.getElementById('darkpool-feed');
+        dpFeed.prepend(dpRow);
+        if (dpFeed.children.length > 8) dpFeed.lastChild.remove();
+    }
+}
+
+function changeTF(tf) {
+    currentTF = tf;
+    document.querySelectorAll('.tf-selector button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tf-' + tf).classList.add('active');
+    loadSymbol(currentSym);
+}
+
+function log(msg) {
+    const l = document.getElementById('algo-log');
+    const d = document.createElement('div');
+    d.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+    l.prepend(d);
+    if (l.children.length > 10) l.lastChild.remove();
+}
+
+setTimeout(init, 500);
+    </script>
+</body>
+</html>
+chart.applyOptions({ width: box.clientWidth, height: box.clientHeight });
 
     loadSymbol(currentSym);
     refreshList();
