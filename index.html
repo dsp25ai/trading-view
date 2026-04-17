@@ -1,365 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>d$p QUANT-FORCE Systematic Dashboard</title>
-    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
-    //fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #f6f8fa;
-            --card: #ffffff;
-            --border: #d0d7de;
-            --text: #24292f;
-            --muted: #57606a;
-            --primary: #0969da;
-            --green: #1a7f37;
-            --red: #cf222e;
-            --yellow: #9a6700;
-            --font-mono: 'JetBrains Mono', monospace;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-        nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 24px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
-        .nav-search { background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; display: flex; align-items: center; gap: 8px; width: 300px; }
-        .nav-search input { background: transparent; border: none; color: var(--text); outline: none; font-size: 0.8rem; width: 100%; }
-        .dashboard { max-width: 1800px; margin: 15px auto; padding: 0 15px; display: grid; grid-template-columns: 1fr 400px; gap: 15px; }
-        .main-pane { display: flex; flex-direction: column; gap: 15px; }
-        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .stat-item { background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 8px; }
-        .stat-label { font-size: 0.65rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
-        .stat-value { font-family: var(--font-mono); font-size: 1.2rem; font-weight: 700; margin-top: 4px; }
-        .chart-pane { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 15px; min-height: 550px; }
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .ticker-info { display: flex; align-items: center; gap: 10px; }
-        .ticker-symbol { font-size: 1.4rem; font-weight: 800; }
-        .tf-selector { display: flex; gap: 2px; background: #f0f0f0; padding: 2px; border-radius: 4px; }
-        .tf-selector button { padding: 3px 8px; border: none; background: transparent; color: var(--muted); border-radius: 3px; cursor: pointer; font-size: 0.7rem; font-weight: 700; }
-        .tf-selector button.active { background: #fff; color: var(--primary); }
-        #chart-box { width: 100%; height: 400px; background: #fff; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 15px; }
-        .mcp-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .mcp-box { background: rgba(9, 105, 218, 0.03); border: 1px solid var(--border); border-radius: 6px; padding: 10px; }
-        .mcp-title { font-size: 0.65rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; text-transform: uppercase; }
-        .side-pane { display: flex; flex-direction: column; gap: 15px; height: calc(100vh - 80px); overflow-y: auto; }
-        .panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
-        .panel-title { font-size: 0.75rem; font-weight: 800; color: var(--muted); margin-bottom: 12px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
-        .flow-feed { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 0.7rem; }
-        .flow-row { display: grid; grid-template-columns: 50px 1fr 60px; gap: 8px; padding: 6px; border-radius: 4px; background: #f6f8fa; border: 1px solid transparent; }
-        .flow-row:hover { border-color: var(--primary); }
-        .flow-ticker { font-weight: 800; color: var(--primary); }
-        .flow-details { color: var(--text); }
-        .flow-value { text-align: right; font-weight: 700; }
-        .bullish { color: var(--green); }
-        .bearish { color: var(--red); }
-        .sentiment-bar { height: 6px; background: #e1e4e8; border-radius: 3px; overflow: hidden; display: flex; margin-top: 10px; }
-        .bull-fill { background: var(--green); height: 100%; transition: 0.5s; }
-        .bear-fill { background: var(--red); height: 100%; transition: 0.5s; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 6px; font-size: 0.6rem; color: var(--muted); border-bottom: 1px solid var(--border); }
-        td { padding: 8px 6px; font-size: 0.75rem; border-bottom: 1px solid #f6f8fa; font-family: var(--font-mono); }
-        .pos { color: var(--green); }
-        .neg { color: var(--red); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>d$p QUANT-FORCE Systematic Dashboard</title>
+<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+:root {
+--bg: #ffffff;
+--card: #f8f9fa;
+--border: #e0e0e0;
+--text: #1a1a1a;
+--muted: #6c757d;
+--primary: #0066cc;
+--green: #28a745;
+--red: #dc3545;
+--yellow: #ffc107;
+--font-mono: 'JetBrains Mono', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 1rem 2rem; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+.nav-search { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; width: 300px; }
+.nav-search input { background: transparent; border: none; color: var(--text); outline: none; font-size: 0.9rem; width: 100%; }
+.dashboard { max-width: 1800px; margin: 2rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 400px; gap: 2rem; }
+.main-pane { display: flex; flex-direction: column; gap: 1.5rem; }
+.stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.stat-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; min-height: 120px; }
+.stat-label { font-size: 0.85rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+.stat-value { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 700; margin-top: 0.5rem; }
+.chart-pane { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; min-height: 550px; }
+.chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.ticker-info { display: flex; align-items: center; gap: 1rem; }
+.ticker-symbol { font-size: 1.4rem; font-weight: 800; }
+.time-tabs { display: flex; gap: 0.5rem; }
+.time-tab { background: transparent; border: none; color: var(--muted); padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+.time-tab.active { background: var(--primary); color: white; }
+#chart { height: 450px; }
+.side-panel { display: flex; flex-direction: column; gap: 1.5rem; }
+.panel-section { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; }
+.section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
+.watchlist-table { width: 100%; }
+.watchlist-table th { text-align: left; font-size: 0.75rem; color: var(--muted); padding: 0.5rem; border-bottom: 1px solid var(--border); }
+.watchlist-table td { padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+.flow-bar { height: 20px; border-radius: 4px; background: linear-gradient(to right, var(--green) 0%, var(--green) 50%, var(--red) 50%, var(--red) 100%); margin: 1rem 0; }
+.log-entry { padding: 0.75rem; background: var(--bg); border-radius: 4px; margin-bottom: 0.5rem; font-size: 0.85rem; }
+.status-optimal { color: var(--green); font-weight: 700; }
+</style>
 </head>
 <body>
-    <nav>
-        <div class="logo">d$p QUANT-FORCE MCP</div>
-        <div class="nav-search">
-            <span>🔍</span>
-            <input type="text" placeholder="TICKER" onkeydown="if(event.key==='Enter') loadSymbol(this.value.toUpperCase())">
-        </div>
-        <div class="logo" style="color:var(--green)">SYSTEM: OPTIMAL</div>
-    </nav>
+<nav>
+<div class="logo">d$p QUANT-FORCE MCP</div>
+<div class="nav-search"><span>\ud83d\udd0d</span><input type="text" placeholder="TICKER" id="tickerInput"></div>
+<div class="status-optimal">SYSTEM: OPTIMAL</div>
+</nav>
+<div class="dashboard">
+<div class="main-pane">
+<div class="stats-bar">
+<div class="stat-item"><div class="stat-label">MARKET CONTEXT (MCP)</div><div class="stat-value" id="mcp">BULLISH</div></div>
+<div class="stat-item"><div class="stat-label">GLOBAL ALPHA SCORE</div><div class="stat-value" id="alpha">84.2</div></div>
+<div class="stat-item"><div class="stat-label">SYSTEM VIX IMPACT</div><div class="stat-value" id="vix">14.22</div></div>
+<div class="stat-item"><div class="stat-label">TOTAL SMART FLOW</div><div class="stat-value" id="flow">$2.4B</div></div>
+</div>
+<div class="chart-pane">
+<div class="chart-header">
+<div class="ticker-info"><span class="ticker-symbol" id="currentTicker">NVDA</span></div>
+<div class="time-tabs">
+<button class="time-tab" data-period="1m">1m</button>
+<button class="time-tab" data-period="5m">5m</button>
+<button class="time-tab active" data-period="1h">1h</button>
+<button class="time-tab" data-period="D">D</button>
+</div>
+</div>
+<div id="chart"></div>
+</div>
+</div>
+<div class="side-panel">
+<div class="panel-section">
+<div class="section-title">Asset Intelligence (Watchlist)</div>
+<table class="watchlist-table">
+<thead><tr><th>TICKER</th><th>PRICE</th><th>CHANGE</th><th>RSI</th><th>ALPHA</th><th>STATUS</th></tr></thead>
+<tbody id="watchlistBody"></tbody>
+</table>
+</div>
+<div class="panel-section">
+<div class="section-title">LIVE OPTIONS FLOW \ud83d\udd25</div>
+<div class="flow-bar"></div>
+</div>
+<div class="panel-section">
+<div class="section-title">DARK POOL/BLOCKS</div>
+<div id="darkPoolLog"></div>
+</div>
+<div class="panel-section">
+<div class="section-title">ALGO LOG</div>
+<div id="algoLog"></div>
+</div>
+</div>
+</div>
+<script>
+const API_KEY = 'csebmepr01qtt21e0dc0csebmepr01qtt21e0dcg';
+let chart;
+let candleSeries;
+let currentSymbol = 'NVDA';
 
-    <div class="dashboard">
-        <div class="main-pane">
-            <div class="stats-bar">
-                <div class="stat-item">
-                    <div class="stat-label">Market Context (MCP)</div>
-                    <div class="stat-value" id="market-regime">BULLISH</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Global Alpha Score</div>
-                    <div class="stat-value" id="global-alpha">84.2</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">System VIX Impact</div>
-                    <div class="stat-value" id="vix-val">14.22</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Total Smart Flow</div>
-                    <div class="stat-value" id="flow-val">$2.4B</div>
-                </div>
-            </div>
-
-            <div class="chart-pane">
-                <div class="chart-header">
-                    <div class="ticker-info">
-                        <div class="ticker-symbol" id="active-symbol">NVDA</div>
-                        <div class="stat-value" id="active-price">--</div>
-                    </div>
-                    <div class="tf-selector">
-                        <button id="tf-1" onclick="changeTF('1')">1m</button>
-                        <button id="tf-5" class="active" onclick="changeTF('5')">5m</button>
-                        <button id="tf-60" onclick="changeTF('60')">1h</button>
-                        <button id="tf-D" onclick="changeTF('D')">D</button>
-                    </div>
-                </div>
-                <div id="chart-box"></div>
-                <div class="mcp-container">
-                    <div class="mcp-box">
-                        <div class="mcp-title">Predictive Framework</div>
-                        <div style="font-size: 0.8rem; font-weight: 700;" id="pattern-display">SCANNING PATTERNS...</div>
-                        <div style="font-size: 0.7rem; color: var(--muted);">Awaiting market signal validation...</div>
-                    </div>
-                    <div class="mcp-box">
-                        <div class="mcp-title">Quant Intelligence</div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-family: var(--font-mono); font-size: 0.75rem;">
-                            <div>RSI (14): <span id="rsi-val">--</span></div>
-                            <div>Alpha: <span id="alpha-val">--</span></div>
-                            <div>ATR: <span id="atr-val">--</span></div>
-                            <div>Vol: <span id="vol-val">--</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="side-pane">
-            <div class="panel">
-                <div class="panel-title">Asset Intelligence (Watchlist)</div>
-                <table>
-                    <thead>
-                        <tr><th>TICKER</th><th>PRICE</th><th>CHANGE</th><th>RSI</th><th>ALPHA</th><th>STATUS</th></tr>
-                    </thead>
-                    <tbody id="watchlist-body"></tbody>
-                </table>
-            </div>
-
-            <div class="panel">
-                <div class="panel-title">LIVE OPTIONS FLOW 🔥</div>
-                <div class="flow-feed" id="flow-feed"></div>
-                <div class="sentiment-bar">
-                    <div class="bull-fill" id="bull-bar" style="width: 65%;"></div>
-                    <div class="bear-fill" id="bear-bar" style="width: 35%;"></div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-title">DARK POOL / BLOCKS</div>
-                <div class="flow-feed" id="darkpool-feed"></div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-title">ALGO LOG</div>
-                <div class="flow-feed" style="font-size: 0.65rem; color: var(--muted);" id="algo-log"></div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-const FINNHUB_KEY = 'd7gp0a9r01qmqj46734gd7gp0a9r01qmqj467350';
-const STOCKS = ['NVDA', 'TSLA', 'SPY', 'AAPL', 'AMD', 'COIN', 'MSFT', 'META', 'MSTR', 'QQQ'];
-let chart, candleSeries, volumeSeries, currentSym = 'NVDA', currentTF = '5';
-
-function init() {
-    const box = document.getElementById('chart-box');
-    chart = LightweightCharts.createChart(box, {
-        layout: { background: { color: '#ffffff' }, textColor: '#57606a' },
-        grid: { vertLines: { color: '#f0f0f0' }, horzLines: { color: '#f0f0f0' } },
-        rightPriceScale: { borderColor: '#d0d7de' },
-        timeScale: { borderColor: '#d0d7de', timeVisible: true }
-    });
-
-    candleSeries = chart.addCandlestickSeries({
-        upColor: '#1a7f37', downColor: '#cf222e', borderVisible: false,
-        wickUpColor: '#1a7f37', wickDownColor: '#cf222e'
-    });
-
-    volumeSeries = chart.addHistogramSeries({
-        color: '#26a69a', priceFormat: { type: 'volume' },
-        priceScaleId: '', scaleMargins: { top: 0.8, bottom: 0 }
-    });
-
-    new ResizeObserver(() => chart.applyOptions({ width: box.clientWidth, height: box.clientHeight })).observe(box);
-        loadSymbol(currentSym);
-    refreshList();
-    refreshStats();
-    setInterval(refreshList, 60000);
-    setInterval(refreshStats, 5000);
-    setInterval(simulateFlow, 3000);
+function initChart() {
+chart = LightweightCharts.createChart(document.getElementById('chart'), {
+width: document.getElementById('chart').clientWidth,
+height: 450,
+layout: { background: { color: '#f8f9fa' }, textColor: '#1a1a1a' },
+grid: { vertLines: { color: '#e0e0e0' }, horzLines: { color: '#e0e0e0' } },
+timeScale: { borderColor: '#e0e0e0' }
+});
+candleSeries = chart.addCandlestickSeries({ upColor: '#28a745', downColor: '#dc3545', borderVisible: false, wickUpColor: '#28a745', wickDownColor: '#dc3545' });
 }
 
-async function loadSymbol(sym) {
-    currentSym = sym;
-    document.getElementById('active-symbol').textContent = sym;
-    const to = Math.floor(Date.now() / 1000);
-    const range = currentTF === 'D' ? 365*86400 : 7*86400;
-    const from = to - range;
-    try {
-        const res = await fetch('https://finnhub.io/api/v1/stock/candle?symbol=' + sym + '&resolution=' + currentTF + '&from=' + from + '&to=' + to + '&token=' + FINNHUB_KEY);
-        const data = await res.json();
-        if (data.s === 'ok') {
-            const candles = data.t.map((t, i) => ({time: t, open: data.o[i], high: data.h[i], low: data.l[i], close: data.c[i]}));
-            const volumes = data.t.map((t, i) => ({time: t, value: data.v[i], color: data.c[i] >= data.o[i] ? 'rgba(26, 127, 55, 0.2)' : 'rgba(207, 34, 46, 0.2)'}));
-            candleSeries.setData(candles);
-            volumeSeries.setData(volumes);
-            chart.timeScale().fitContent();
-            const last = data.c[data.c.length-1];
-            document.getElementById('active-price').textContent = '$' + last.toFixed(2);
-            updateIndicators(candles);
-        } else {
-            throw new Error('API Error');
-        }
-    } catch (e) {
-        log('API Limit - Using mock data for ' + sym);
-        generateMockChart(sym);
-    }
+async function fetchQuote(symbol) {
+try {
+const url = 'https://finnhub.io/api/v1/quote?symbol=' + symbol + '&token=' + API_KEY;
+const response = await fetch(url);
+const data = await response.json();
+return data;
+} catch (error) {
+console.error('Quote error:', error);
+return { c: 135.25, d: 2.45, dp: 1.85, h: 137.89, l: 134.12, o: 135.0, pc: 132.8 };
+}
 }
 
-function generateMockChart(sym) {
-    const candles = [];
-    const volumes = [];
-    let basePrice = 150 + Math.random() * 100;
-    const now = Math.floor(Date.now() / 1000);
-    const steps = 100;
-    const interval = currentTF === 'D' ? 86400 : parseInt(currentTF) * 60;
-    for (let i = 0; i < steps; i++) {
-        const t = now - (steps - i) * interval;
-        const open = basePrice + (Math.random() * 4 - 2);
-        const close = open + (Math.random() * 4 - 2);
-        const high = Math.max(open, close) + Math.random() * 2;
-        const low = Math.min(open, close) - Math.random() * 2;
-        candles.push({time: t, open, high, low, close});
-        volumes.push({time: t, value: Math.random() * 1000000, color: close >= open ? 'rgba(26, 127, 55, 0.2)' : 'rgba(207, 34, 46, 0.2)'});
-        basePrice = close;
-    }
-    candleSeries.setData(candles);
-    volumeSeries.setData(volumes);
-    chart.timeScale().fitContent();
-    const last = candles[candles.length-1].close;
-    document.getElementById('active-price').textContent = '$' + last.toFixed(2) + ' (SIM)';
-    updateIndicators(candles);
+async function fetchCandles(symbol, resolution, from, to) {
+try {
+const url = 'https://finnhub.io/api/v1/stock/candle?symbol=' + symbol + '&resolution=' + resolution + '&from=' + from + '&to=' + to + '&token=' + API_KEY;
+const response = await fetch(url);
+const data = await response.json();
+if (data.s === 'ok') {
+const candles = [];
+for (let i = 0; i < data.t.length; i++) {
+candles.push({ time: data.t[i], open: data.o[i], high: data.h[i], low: data.l[i], close: data.c[i] });
+}
+return candles;
+}
+return generateMockCandles();
+} catch (error) {
+console.error('Candle error:', error);
+return generateMockCandles();
+}
 }
 
-function updateIndicators(data) {
-    const curr = data[data.length-1];
-    const prev = data[data.length-2] || curr;
-    const rsi = (Math.random() * 30 + 40).toFixed(1);
-    const alpha = (Math.random() * 20 + 70).toFixed(1);
-    document.getElementById('rsi-val').textContent = rsi;
-    document.getElementById('alpha-val').textContent = alpha;
-    document.getElementById('atr-val').textContent = (Math.random() * 5 + 2).toFixed(2);
-    document.getElementById('vol-val').textContent = (curr.high - curr.low).toFixed(2);
-    let pattern = 'SIDEWAYS', color = 'var(--muted)';
-    if (curr.close > prev.high) { pattern = 'BULLISH BREAKOUT'; color = 'var(--green)'; }
-    else if (curr.close < prev.low) { pattern = 'BEARISH REJECTION'; color = 'var(--red)'; }
-    document.getElementById('pattern-display').textContent = pattern;
-    document.getElementById('pattern-display').style.color = color;
-    log('Analyzed ' + currentSym + ': ' + pattern);
+function generateMockCandles() {
+const candles = [];
+const now = Math.floor(Date.now() / 1000);
+let price = 135;
+for (let i = 100; i >= 0; i--) {
+const time = now - (i * 3600);
+const open = price;
+const change = (Math.random() - 0.5) * 5;
+const close = price + change;
+const high = Math.max(open, close) + Math.random() * 2;
+const low = Math.min(open, close) - Math.random() * 2;
+candles.push({ time: time, open: open, high: high, low: low, close: close });
+price = close;
+}
+return candles;
 }
 
-async function refreshList() {
-    const tbody = document.getElementById('watchlist-body');
-    tbody.innerHTML = '';
-    for (const s of STOCKS) {
-        try {
-            const res = await fetch('https://finnhub.io/api/v1/quote?symbol=' + s + '&token=' + FINNHUB_KEY);
-            const q = await res.json();
-            if (q.c) {
-                renderWatchlistRow(s, q.c, q.dp || 0);
-            } else { throw new Error('API'); }
-        } catch (e) {
-            const mockC = (Math.random() * 100 + 150).toFixed(2);
-            const mockDp = (Math.random() * 4 - 1.5).toFixed(2);
-            renderWatchlistRow(s, parseFloat(mockC), parseFloat(mockDp));
-        }
-    }
+async function loadChart(symbol, resolution) {
+const to = Math.floor(Date.now() / 1000);
+const from = to - (100 * 3600);
+const candles = await fetchCandles(symbol, resolution || '60', from, to);
+candleSeries.setData(candles);
 }
 
-function renderWatchlistRow(s, price, dp) {
-    const tbody = document.getElementById('watchlist-body');
-    const row = tbody.insertRow();
-    row.onclick = () => loadSymbol(s);
-    row.style.cursor = 'pointer';
-    const alpha = (Math.random() * 20 + 75).toFixed(0);
-    row.innerHTML = '<td><strong>' + s + '</strong></td><td>$' + price.toFixed(2) + '</td><td class="' + (dp >= 0 ? 'pos' : 'neg') + '">' + (dp >= 0 ? '+' : '') + dp.toFixed(2) + '%</td><td>' + (Math.random()*40 + 30).toFixed(1) + '</td><td><span style="color:var(--primary)">' + alpha + '</span></td><td>' + (dp > 1.2 ? 'TRENDING' : (dp < -1 ? 'WEAK' : 'STABLE')) + '</td>';
+async function updateWatchlist() {
+const symbols = ['AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL'];
+const tbody = document.getElementById('watchlistBody');
+tbody.innerHTML = '';
+for (const sym of symbols) {
+const quote = await fetchQuote(sym);
+const row = document.createElement('tr');
+const change = quote.d || 0;
+const changePercent = quote.dp || 0;
+const changeColor = change >= 0 ? 'var(--green)' : 'var(--red)';
+row.innerHTML = '<td>' + sym + '</td><td>$' + (quote.c || 0).toFixed(2) + '</td><td style="color:' + changeColor + '">' + (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%</td><td>' + (Math.random() * 100).toFixed(0) + '</td><td>' + (Math.random() * 100).toFixed(0) + '</td><td>ACTIVE</td>';
+tbody.appendChild(row);
+}
 }
 
-function refreshStats() {
-    const alpha = (Math.random() * 5 + 80).toFixed(1);
-    const vix = (Math.random() * 2 + 13).toFixed(2);
-    const flow = (Math.random() * 0.5 + 2.2).toFixed(1);
-    const bull = Math.floor(Math.random() * 20 + 55);
-    document.getElementById('global-alpha').textContent = alpha;
-    document.getElementById('vix-val').textContent = vix;
-    document.getElementById('flow-val').textContent = '$' + flow + 'B';
-    document.getElementById('bull-bar').style.width = bull + '%';
-    document.getElementById('bear-bar').style.width = (100 - bull) + '%';
-    document.getElementById('market-regime').textContent = bull > 50 ? 'BULLISH' : 'NEUTRAL';
+function addLogEntry(containerId, message) {
+const container = document.getElementById(containerId);
+const entry = document.createElement('div');
+entry.className = 'log-entry';
+entry.textContent = message;
+container.insertBefore(entry, container.firstChild);
+if (container.children.length > 5) {
+container.removeChild(container.lastChild);
+}
 }
 
-function simulateFlow() {
-    const tickers = ['NVDA', 'TSLA', 'SPY', 'AAPL', 'AMD', 'COIN'];
-    const ticker = tickers[Math.floor(Math.random() * tickers.length)];
-    const isCall = Math.random() > 0.45;
-    const value = (Math.random() * 500 + 50).toFixed(1);
-    const row = document.createElement('div');
-    row.className = 'flow-row';
-    row.innerHTML = '<div class="flow-ticker">' + ticker + '</div><div class="flow-details ' + (isCall?'bullish':'bearish') + '">' + (isCall?'CALL':'PUT') + ' $' + (Math.random()*200+100).toFixed(0) + ' exp 06/20</div><div class="flow-value">$' + value + 'K</div>';
-    const feed = document.getElementById('flow-feed');
-    feed.prepend(row);
-    if (feed.children.length > 10) feed.lastChild.remove();
-    if (Math.random() > 0.7) {
-        const dpRow = document.createElement('div');
-        dpRow.className = 'flow-row';
-        dpRow.innerHTML = '<div class="flow-ticker">' + ticker + '</div><div class="flow-details" style="color:var(--yellow)">BLOCK TRADE @ ASKS</div><div class="flow-value" style="color:var(--yellow)">$' + (Math.random()*5+1).toFixed(1) + 'M</div>';
-        const dpFeed = document.getElementById('darkpool-feed');
-        dpFeed.prepend(dpRow);
-        if (dpFeed.children.length > 8) dpFeed.lastChild.remove();
-    }
+function updateLogs() {
+const darkPoolMessages = [
+'NVDA: 15.2M shares @ $135.45 (BATS)',
+'TSLA: 8.7M shares @ $245.12 (DARK)',
+'AAPL: 22.1M shares @ $178.34 (BLOCK)'
+];
+const algoMessages = [
+'MOMENTUM: BUY signal detected on NVDA',
+'MEAN REVERSION: Oversold condition TSLA',
+'BREAKOUT: Price action above resistance AAPL'
+];
+const darkMsg = darkPoolMessages[Math.floor(Math.random() * darkPoolMessages.length)];
+const algoMsg = algoMessages[Math.floor(Math.random() * algoMessages.length)];
+addLogEntry('darkPoolLog', darkMsg);
+addLogEntry('algoLog', algoMsg);
 }
 
-function changeTF(tf) {
-    currentTF = tf;
-    document.querySelectorAll('.tf-selector button').forEach(b => b.classList.remove('active'));
-    document.getElementById('tf-' + tf).classList.add('active');
-    loadSymbol(currentSym);
+document.addEventListener('DOMContentLoaded', function() {
+initChart();
+loadChart(currentSymbol, '60');
+updateWatchlist();
+updateLogs();
+setInterval(updateLogs, 5000);
+setInterval(updateWatchlist, 30000);
+document.querySelectorAll('.time-tab').forEach(tab => {
+tab.addEventListener('click', function() {
+document.querySelectorAll('.time-tab').forEach(t => t.classList.remove('active'));
+this.classList.add('active');
+const period = this.getAttribute('data-period');
+const resolutionMap = { '1m': '1', '5m': '5', '1h': '60', 'D': 'D' };
+loadChart(currentSymbol, resolutionMap[period]);
+});
+});
+document.getElementById('tickerInput').addEventListener('keypress', function(e) {
+if (e.key === 'Enter') {
+const symbol = this.value.toUpperCase();
+if (symbol) {
+currentSymbol = symbol;
+document.getElementById('currentTicker').textContent = symbol;
+loadChart(symbol, '60');
 }
-
-function log(msg) {
-    const l = document.getElementById('algo-log');
-    const d = document.createElement('div');
-    d.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
-    l.prepend(d);
-    if (l.children.length > 10) l.lastChild.remove();
 }
-
-setTimeout(init, 500);
-    </script>
+});
+});
+</script>
 </body>
 </html>
-chart.applyOptions({ width: box.clientWidth, height: box.clientHeight });
-
-    loadSymbol(currentSym);
-    refreshList();
-    refreshStats();
-    setInterval(refreshList, 60000);
-    setInterval(refreshStats, 5000);
-    setInterval(simulateFlow, 3000);
-}
-
-async function loadSymbol(sym) {
-    currentSym = sym;
-    document.getElementById('active-symbol').textContent = sym;
-    const to = Math.floor(Date.now() / 1000);
-    const range = currentTF === 'D' ? 365*86400 : 7*86400;
-    const from = to - range;
-
-    try {
-        const res = await fetch('https://finnhub.io/api/v1/stock/candle?symbol=' + sym + '&resolution=' + currentTF + '&from=' + from + '&to=' + to + '&token=' + FINNHUB_KEY);
-        const data = await res.json();
-        if (data.s === 'ok') {
-            const candles = data.t.map((t, i) => ({ time: t, open: data.o[i], high: data.h
