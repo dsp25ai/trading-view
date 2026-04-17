@@ -174,8 +174,7 @@ async function updateWatchlist() {
 const symbols = ['AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL'];
 const tbody = document.getElementById('watchlist-body');
 tbody.innerHTML = '';
-for (const sym of symbols) {
-const quote = await fetchQuote(sym);
+for (const sym of symbols) {const quote = { c: 100 + Math.random() * 50, d: (Math.random() - 0.5) * 5, dp: (Math.random() - 0.5) * 3 };
 const row = document.createElement('tr');
 const change = quote.d || 0;
 const changePercent = quote.dp || 0;
